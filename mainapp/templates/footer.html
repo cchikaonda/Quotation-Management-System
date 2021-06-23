@@ -1,0 +1,55 @@
+<!-- Footer -->
+<footer id="page-footer" class="bg-body-light">
+    <div class="content py-3">
+        <div class="row font-size-sm font-w600 text-primary">
+            <div class="col-sm-6 order-sm-2 py-1 text-center text-sm-right">
+                Version <i class="far fa-hand-point-right text-danger"></i> <a class="font-w600" href="https://1.envato.market/ydb" target="_blank">1.0.1</a>
+            </div>
+            <div class="col-sm-6 py-1 text-center text-sm-left">
+                <a class="font-w600" href="https://1.envato.market/xWy" target="_blank">MCA-Tech Solutions</a> <i class="text-primary">&copy;</i> <span class="text-danger" data-toggle="year-copy"></span><a >-All Rights Reserved</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row cfooter">
+        <div class="col-sm-12">
+            <div class="content py-1 sale_buttons_section">     
+                    {% if order.payment or order.coupon %}
+                    {%if order.payment.amount_received > order.get_after_tax_final_price or order.payment.amount_received == order.get_after_tax_final_price%}
+                    <button type="button" name="button" class="btn btn-outline-success item_buttun">Cash Sale</button>
+                    <a href="{% url 'order_summery' order.id %}"><button type="button" name="button" class="btn btn-outline-primary item_buttun" data-toggle="modal" >Checkout</button></a>
+                    {% endif %}
+                    {% endif %}
+                    {% if order and items_in_order > 0 %}
+                    <a data-toggle="modal" data-target="#confirmDeleteItemModal"><button type="button" name="button" class="btn btn-outline-danger item_buttun" data-toggle="modal" data-target="#clearModal">Suspend</button> </a>
+                    <a data-toggle="modal" data-target="#cashModal"><button type="button" name="button" class="btn btn-outline-info item_buttun" data-toggle="modal" >Pay Cash</button></a>
+                    
+                    {% endif %}
+                    
+                    
+                
+                    <a href="{% url 'logout_request' %}">    
+                    <button type="button" class="back-button btn btn-lg btn-outline-danger ml-2" style="float: right;">
+                    <i class="fa fa-sign-out-alt fa-2x text-danger-75 ml-1"></i> <h6>LOGOUT</h6> 
+                    </button>
+                    </a> 
+                <a href="{%url 'system_dashboard' %}"> 
+                    <button type="button" class="back-button btn btn-lg btn-outline-success text-success-75 ml-2"  style="float: right;">
+                    <i class="si si-speedometer fa-2x text-success-75 ml-1"><h6>DASHBOARD</h6> </i> 
+                    </button>
+                </a>
+                {% if order and items_in_order > 0 %}
+                <button type="button" name="button" class="btn btn-outline-info  item_buttun dropdown-toggle ml-2" value="submit"  id="navbarDropdown"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="float: right;">Other Payments</button></a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#cashModal">Cash</a>
+                            <a class="dropdown-item" href="#" onclick="app.payed('card');">Card</a>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#CodeModal">Promotion Code</a>
+                        </div>
+                {% endif %}
+                <a data-toggle="modal" data-target="#itemSearchModal"><button type="button" name="button" class="btn btn-outline-info item_buttun ml-2" data-toggle="modal" style="float: right;">Item Lookup</button></a>
+            </div>
+        
+        </div>
+    </div>
+</footer>
+<!-- END Footer -->

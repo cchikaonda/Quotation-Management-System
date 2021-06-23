@@ -1,0 +1,35 @@
+
+{% load cart_template_tags %}
+<!-- Notifications Dropdown -->
+<div class="dropdown d-inline-block ml-2">
+    <button type="button" class="btn btn-sm btn-dual" id="page-header-notifications-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-cart-plus"></i>
+        <span class="badge badge-primary badge-pill">{{request.user|cart_item_count}}</span>
+    </button>
+    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0 border-0 font-size-sm" aria-labelledby="page-header-notifications-dropdown">
+        <div class="p-2 bg-primary text-center">
+            <h5 class="dropdown-header text-uppercase text-white">Logged In Users</h5>
+        </div>
+        <ul class="nav-items mb-0">
+            <!-- Users Navigation -->
+            {% for queryset in queryset%}
+            <ul class="nav-items mb-0">
+                <li>
+                    <a class="media py-2" href="javascript:void(0)">
+                        <div class="mr-3 ml-2 overlay-container overlay-bottom">
+                            <img class="img-avatar img-avatar48" src="{{queryset.imageURL}}" alt="">
+                            <span class="overlay-item item item-tiny item-circle border border-2x border-white bg-success"></span>
+                        </div>
+                        <div class="media-body">
+                            <div class="font-w600">{{queryset.full_name}}</div>
+                            <div class="font-w400 text-muted">{{queryset.user_role}}</div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <!-- END Users Navigation -->
+          {% endfor %}
+        </ul>
+    </div>
+</div>
+<!-- END Notifications Dropdown -->

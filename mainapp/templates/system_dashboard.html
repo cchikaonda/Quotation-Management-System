@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% get_media_prefix as MEDIA_URL %}
+
+
+            <!-- Hero -->
+            <div class="bg-image overflow-hidden" style="height: 110px;">
+                <div class="bg-primary-light-op">
+                    <div class="content content-narrow content-full ">
+                        <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center mt-30 mb-2 text-center text-sm-left">
+                            <div class="flex-sm-fill">
+                                <h1 class="font-w600 text-dark mb-0 invisible" data-toggle="appear">Dashboard</h1>
+                                <h2 class="h4 font-w400 text-dark mb-0 invisible" data-toggle="appear" data-timeout="250">Welcome {{user.full_name|title}}</h2>
+                            </div>
+                            <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
+                                <span class="d-inline-block invisible" data-toggle="appear" data-timeout="350">
+                                    <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple" href="{% url 'quotation_dashboard' %}">
+                                        <i class="fa fa-plus mr-1"></i> New Quotation
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END Hero -->
+
+            <!-- Page Content -->
+            <div class="content content-narrow">
+                <!-- Stats -->
+                <div class="row">
+                    <div class="col-6 col-md-3 col-lg-6 col-xl-3">
+                        <a class="block block-rounded block-link-pop border-left border-primary border-4x" href="javascript:void(0)">
+                            <div class="block-content block-content-full">
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">Pending Quotations</div>
+                                <div class="font-size-h2 font-w400 text-dark badge badge-primary">{{total_pending_orders}} </div> {{pending_total_cost}}
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 col-lg-6 col-xl-3">
+                        <a class="block block-rounded block-link-pop border-left border-primary border-4x" href="javascript:void(0)">
+                            <div class="block-content block-content-full">
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">Cancelled Quotations</div>
+                                <div class="font-size-h2 font-w400 text-dark badge badge-warning">{{total_cancelled_orders}} </div> {{cancelled_total_cost}}
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 col-lg-6 col-xl-3">
+                        <a class="block block-rounded block-link-pop border-left border-primary border-4x" href="javascript:void(0)">
+                            <div class="block-content block-content-full">
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">Completed Quotations</div>
+                                <div class="font-size-h2 font-w400 text-dark badge badge-success">{{total_completed_orders}}  </div> {{completed_total_cost}} 
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-6 col-md-3 col-lg-6 col-xl-3">
+                        <a class="block block-rounded block-link-pop border-left border-primary border-4x" href="javascript:void(0)">
+                            <div class="block-content block-content-full">
+                                <div class="font-size-sm font-w600 text-uppercase text-muted">Expired Quotations</div>
+                                <div class="font-size-h2 font-w400 text-dark badge badge-danger">{{expired_quotations}}</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <!-- END Stats -->
+
+
+                  <!-- Dashboard Charts -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="block block-rounded block-mode-loading-oneui">
+                    <div class="block-header">
+                        <h3 class="block-title">Total Cost Of Quotations</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                <i class="si si-refresh"></i>
+                            </button>
+                            <button type="button" class="btn-block-option">
+                                <i class="si si-settings"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="block-content p-0 bg-body-light text-center">
+                    <div class="pt-3" style="height: 380px;"><canvas id="myChart2"></canvas></div>
+
+                    {% block jquery %}
+                    <script>
+                        $(document).ready(function(){
+                            var ctx = document.getElementById('myChart2').getContext('2d');
+                        var chart = new Chart(ctx, {
+                        // The type of chart we want to create
+                        type: 'doughnut',
+
+                        // The data for our dataset
+                        data: {
+                        labels: ['Pending Quotes','Cancelled Quotes','Completed Quotes',],
+                        datasets: [{
+                            label: 'Amount'+ ' in {{pending_total_cost.currency}}',
+                            backgroundColor: [
+                                '#5c80d1',
+                                '#f3b760',
+                                '#46c37b'
+                                
+                                
+                            ],
+                            hoverBackgroundColor: [
+                                'rgba(117, 176, 235, .75)',
+                                'rgba(250, 219, 125, .75)',
+                                'rgba(171, 227, 125, .75)'
+                                
+                            ],
+                            data: [{{pending_total_cost.amount}}, {{cancelled_total_cost.amount}}, {{completed_total_cost.amount}}]
+                        }]
+                        },
+
+                        // Configuration options go here
+                        options: {
+                        scales:{
+                            yAxes:[{
+                            ticks:{
+                                callback:function(value, index){
+                                return '{{monday_total_sales.currency}} ' + value;
+                                }
+                            }
+                            }
+
+                            ]
+
+                        }
+
+                        }
+                        });
+
+                        })
+                        {% endblock %}
+                    </script>
+                    </div>
+
+                    <div class="block-content">
+                        <div class="row items-push text-center py-3">
+                            <div class="col-6 col-xl-3">
+                                <i class="fa fa-wallet fa-2x text-muted"></i>
+                                <div class="text-muted mt-3 ">Total Quotes: <a href="" class="text-dark badge badge-success">{{total_quotes}}</a></div>
+                            </div>
+                            <div class="col-6 col-xl-3">
+                                <i class="fa fa-business-time fa-2x text-muted"></i>
+                                <div class="text-muted mt-3">Today:<a href="" class="text-dark badge badge-warning">{{total_quotes_today}}</a></div>
+                            </div>
+                            <div class="col-6 col-xl-3">
+                                <i class="fa fa-user-alt fa-2x text-muted"></i>
+                                <div class="text-muted mt-3"><a href="" class="badge badge-primary">{{all_users}}</a> Users</div>
+                            </div>
+                            <div class="col-6 col-xl-3">
+                                <i class="fa fa-users fa-2x text-muted"></i>
+                                <div class="text-muted mt-3"><a href="" class="badge badge-primary">{{all_customers}}</a> Customers</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="block block-rounded block-mode-loading-oneui">
+                    <div class="block-header">
+                        <h3 class="block-title">Daily Weekly Quotations</h3>
+                        <div class="block-options">
+                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                <i class="si si-refresh"></i>
+                            </button>
+                            <button type="button" class="btn-block-option">
+                                <i class="si si-settings"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="block-content p-0 bg-body-light text-center">
+                    <div class="pt-3" style="height: 380px;"><canvas id="myChart"></canvas></div>
+                    <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var chart = new Chart(ctx, {
+                        // The type of chart we want to create
+                        type: 'bar',
+
+                        // The data for our dataset
+                        data: {
+                        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                        datasets: [{
+                            label: 'This Weeks Number of Quotations',
+                            backgroundColor: '#d26a5c',
+                            borderColor: '#d26a5c',
+                            data: [{{monday_total_quotes}}, {{tuesday_total_quotes}}, {{wednesday_total_quotes}}, {{thursday_total_quotes}}, {{friday_total_quotes}}, {{saturday_total_quotes}}, {{sunday_total_quotes}}]
+                        },
+
+                        {
+                            label: 'Last Weeks Number of Quotations',
+                            fill: true,
+                            backgroundColor: '#46c37b',
+                            borderColor: '#46c37b',
+                            pointBackgroundColor: 'rgba(171, 227, 125, .75)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(171, 227, 125. .75)',
+                            data: [{{lw_monday_total_quotes}}, {{lw_tuesday_total_quotes}}, {{lw_wednesday_total_quotes}}, {{lw_thursday_total_quotes}}, {{lw_friday_total_quotes}}, {{lw_saturday_total_quotes}}, {{lw_sunday_total_quotes}}]
+                        }]
+                        },
+                    
+                        // Configuration options go here
+                        options: {}
+                        });
+                    </script>
+                        <!-- Chart.js is initialized in js/pages/be_pages_dashboard.min.js which was auto compiled from _es6/pages/be_pages_dashboard.js) -->
+                        <!-- For more info and examples you can check out http://www.chartjs.org/docs/ -->
+                    </div>
+
+                    <div class="block-content">
+                        <div class="row items-push text-center py-3">
+                            <div class="col-6 col-xl-4">
+                                <i class="fa fa-clone fa-2x text-muted"></i>
+                                <div class="text-muted mt-3">Item Categories <a href="" class="text-dark badge badge-success">{{total_item_cat}}</a></div>
+                            </div>
+                            <div class="col-6 col-xl-4">
+                                <i class="fa fa-swatchbook fa-2x text-muted"></i>
+                                <div class="text-muted mt-3">Items <a href="" class="text-dark badge badge-success">{{total_items}}</a></div>
+                            </div>
+                            <div class="col-6 col-xl-4">
+                                <i class="fa fa-archive fa-2x text-muted"></i>
+                                <div class="text-muted mt-3">Item Units <a href="" class="text-dark badge badge-success">{{total_units}}</a></div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- END Dashboard Charts -->
+
+                <!-- Customers and Latest Orders -->
+                <div class="row row-deck">
+                    <!-- Latest Customers -->
+                    <div class="col-lg-6">
+                        <div class="block block-mode-loading-oneui">
+                            <div class="block-header border-bottom">
+                                <h3 class="block-title">Latest Customers</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                        <i class="si si-refresh"></i>
+                                    </button>
+                                    <button type="button" class="btn-block-option">
+                                        <i class="si si-settings"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full">
+                                <table class="table table-striped table-hover table-vcenter font-size-sm mb-0">
+                                    <thead >
+                                        <tr class="text-uppercase">
+                                            <th style="width: 10px;">ID</th>
+                                            <th class="font-w700" style="width: 40%;">Name</th>
+                                            <th class="d-none d-sm-table-cell font-w700 text-center" style="width: 30%;">Phone #</th>
+                                            <th class="d-none d-sm-table-cell font-w700 text-center" style="width: 20%;">Email</th>
+                                            <th class="d-none d-sm-table-cell font-w700 text-center" style="width: 10%;">Orders</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for customer in customers %}
+                                        <tr>
+                                            <td>
+                                                <span class="font-w600">{{forloop.counter}}</span>
+                                            </td>
+                                            <td class="font-w600">
+                                                {{customer.name}}
+                                            </td>
+                                            <td>
+                                                {{customer.phone_number}}
+                                            </td>
+                                            <td >
+                                                {{customer.email}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{customer.total_quotations}}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Latest Customers -->
+
+                    <!-- Latest Orders -->
+                    <div class="col-lg-6">
+                        <div class="block block-mode-loading-oneui">
+                            <div class="block-header border-bottom">
+                                <h3 class="block-title">Latest Quotations
+                                </h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                        <i class="si si-refresh"></i>
+                                    </button>
+                                    <button type="button" class="btn-block-option">
+                                        <i class="si si-settings"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full">
+                                <table class="table table-striped table-hover  table-vcenter font-size-sm mb-0">
+                                    <thead >
+                                        <tr class="text-uppercase">
+                                            <th class="font-w700">ID</th>
+                                            <th class="d-none d-sm-table-cell font-w700">Date</th>
+                                            <th class="font-w700">State</th>
+                                            <th class="d-none d-sm-table-cell font-w700 text-right" style="width: 120px;">Total Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                        <tr>
+                                            <td>
+                                                <span class="font-w600">{{order.code}}</span>
+                                            </td>
+                                            <td class="d-none d-sm-table-cell">
+                                                <span class="font-size-sm text-muted">{{order.order_date}}</span>
+                                            </td>
+                                            {% if order.status == 'Pending' %}
+                                            <td > <a href="" class="badge badge-primary">{{ order.status }}</a></td>
+                                            {% elif order.status == 'Cancelled' %}
+                                            <td> <a href="" class="badge badge-danger">{{ order.status }}</a></td>
+                                            {% else %}
+                                            <td><a href="" class="badge badge-success">{{order.status}}</a></td>
+                                            {% endif %}
+                                            <td class="d-none d-sm-table-cell text-right">
+                                                {{order.order_total}}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END Latest Orders -->
+                </div>
+                <!-- END Customers and Latest Orders -->
+            </div>
+            <!-- END Page Content -->
+
+
+
+<script type="text/javascript">
+  $(window).on('load',function(){
+      setTimeout(function(){
+          if(!Cookies.get('modalShown')) {
+              $('#welcome_message').modal('show');
+            Cookies.set('modalShown', true);
+            console.error('Modal here!!');
+          } else {
+
+          }
+
+  },0.10);
+  });
+</script>
+
+
+
+
+
+{% endblock %}

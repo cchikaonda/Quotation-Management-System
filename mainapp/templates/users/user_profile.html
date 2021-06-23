@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load cart_template_tags %}
+{% block body %}
+
+  <div id="page-container">
+
+
+  <!-- Form Submission in Options -->
+          <div class="content">
+          <div class="row">
+              <div class="col-md-3">
+
+                <!-- profile image -->
+                <div class="bg-image" >
+                <div class="block">
+                <div class="content content-full text-center">
+                          <div class="my-6">
+                              <img class="profile-pic-avatar-thumb" src="{{user.imageURL}}" alt="">
+                          </div>
+                        <a href = "{% url 'change_password' %}">  <button class="btn btn-primary" type="button" name="button">Change Password</button> </a>
+                      </div>
+                </div>
+              </div>
+              <!-- END profile image -->
+              </div>
+
+              <div class="col-md-6 block">
+                <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+
+                  {{form|crispy}}
+
+                  <div class="">
+                    <button type="submit" name="button" class="btn btn-primary" >Save </button>
+                    <button type="button" name="button" class="btn btn-success">Clear</button>
+                    <button type="button" name="button" class="btn btn-warning">Cancel</button>
+                    <br> </br>
+                  </div>
+                </form>
+              </div>
+          </div>
+
+                <!-- END Page Content -->
+
+
+
+{% endblock %}

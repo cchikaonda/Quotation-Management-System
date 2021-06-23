@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block body %}
+<div id="page-container">
+          <!-- Main Container -->
+          <main id="main-container">
+            <div class="bg-body-light">
+                <div class="content content-full">
+                    <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
+                        <h1 class="flex-sm-fill h2 my-2">
+                            <small class="d-block d-sm-inline-block mt-2 mt-sm-0 font-size-base font-w400 text-muted">{{header}} Panel</small>
+                        </h1>
+                        <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-alt">
+                              <i class="nav-main-link-icon fa fa-tachometer-alt si si-speedometer"></i>
+                                <li class="breadcrumb-item"></li>
+                                <li class="breadcrumb-item" aria-current="page">
+                                    <a class="link-fx" href="">  {{header}}</a>
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+  <div class="content">
+        <!-- Full Table -->
+        <div class="block">
+            <div class="block-content">
+              <div class="block-header">
+                <button class="btn btn-primary show-form" data-url="{% url 'user_create' %}"> <span class="fa fa-plus fa-1x"></span> Add New User</button>
+              </div>
+            <div class="block-content block-content-full">
+
+                <!-- DataTables init on table by adding .js-dataTable-buttons class, functionality is initialized in js/pages/be_tables_datatables.min.js which was auto compiled from _es6/pages/be_tables_datatables.js -->
+                <table class="table table-bordered table-striped table-vcenter" id="user-table">
+                  <thead >
+                    <tr>
+                        <th class="text-center" >
+                            <i class="far fa-user"></i>
+                        </th>
+                        <th style="width: 10%;">Role</th>
+                        <th style="width: 20%;">Email</th>
+
+                        <th style="width: 15%;">Name</th>
+                        <th style="width: 10%;">Phone</th>
+                        <th style="width: 10%;">Active</th>
+                        <th style="width: 10%;">Admin</th>
+                        <th style="width: 10%;">Staff</th>
+                        <th class="text-center" style="width: 100px;">Actions</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% include "users/user_list_2.html" %}
+                  </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="modal-user">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content"></div>
+  </div>
+</div>
+{% endblock %}

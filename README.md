@@ -1,2 +1,2 @@
-# Quotation-Management-System
-A System to generate quotations
+Default user: admin@dary.com
+Pass: letmein
